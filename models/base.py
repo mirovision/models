@@ -1,2 +1,3 @@
 from models.CVModel import CVModel
 from models.ObjectDetection import ObjectDetection
+from models.ObjectDetectionVideo import ObjectDetectionVideo
