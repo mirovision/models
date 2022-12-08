@@ -5,11 +5,18 @@ venv
 *.py[cod]
 *$py.class
 
+
+local_test/
+
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
+bin
+lib64
+lib/
+pyvenv.cfg
 build/
 develop-eggs/
 dist/
@@ -27,6 +34,7 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.test/
 MANIFEST
 
 # PyInstaller

@@ -1,0 +1,4 @@
+transformers
+Pillow
+pyTorch
+requests

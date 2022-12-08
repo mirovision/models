@@ -12,7 +12,7 @@ class CVModel:
         return
     def input(self, image):
         # this will be the call to generate
-        return
+        return 
     def output(self):
         # this will be the call to return the output of the model
         return
