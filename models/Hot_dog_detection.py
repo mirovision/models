@@ -20,11 +20,11 @@ class HotDog(CVModel):
         self. hot_dog = self.model.config.id2label[predicted_class_idx]
 
     def edit_frame(self, image, position, font,  font_size):
-
+            
         edit_img = ImageDraw.Draw(image) 
-        
+        print("hola")       
         font = ImageFont.truetype(font , font_size)
         edit_img.text((position[0], position[1]),  self.hot_dog, font=font, fill=(255,255,255))
-       
+        image.save("edited_foto.jpg")
        # to see the result you need to save it as this example
-        #image.save("edited_butifarra.jpg")
+        #image.save("edited_butifarra.jpg")s
