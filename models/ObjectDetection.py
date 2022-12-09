@@ -35,8 +35,9 @@ class ObjectDetection(CVModel):
         self.__outputs = self.__model(**self.__inputs)
     
     def input(self, image):
+        from io import BytesIO
         super().input(image=None)
-        self.__parse_input(image=image)
+        self.__parse_input(image=BytesIO(image))
         self.__get_output()
         
         return True
@@ -60,15 +61,19 @@ class ObjectDetection(CVModel):
                 text = self.__model.config.id2label[label.item()] + ": " + str(round(score.item(), 3))
                 cv2.putText(self.__result_image, text, (int(box[0]+5),int(box[1]+13)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         
-        result  = self.__result_image * 255
-        return Image.fromarray(self.__result_image)
+        #result  = self.__result_image * 255
+        #return Image.fromarray(self.__result_image)
+        return self.__result_image
 
     
     def output(self):
         super().output()
         import torch
+        import cv2
         target_sizes = torch.tensor([self.__image.size[::-1]])
         self.__results = self.__feature_extractor.post_process_object_detection(self.__outputs, target_sizes=target_sizes)[0]
-        image = self.__draw_output()
-        image.save("sample.jpg")
-        return True
+        # image = self.__draw_output()
+        # image.save("sample.jpg")
+        result = self.__draw_output()
+        success, encoded_image = cv2.imencode('.jpg', result)
+        return result
