@@ -71,7 +71,6 @@ class ObjectDetectionVideo(CVModel):
     
     def draw_output(self):
         import cv2
-        from PIL import ImageDraw
         import numpy as np
         #img_draw = ImageDraw.Draw(self.__image)
         for output in self.parsed_outputs:

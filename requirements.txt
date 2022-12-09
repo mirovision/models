@@ -6,3 +6,4 @@ opencv-python
 # sudo apt install ffmpeg
 numpy
 ffmpeg-python
+matplotlib

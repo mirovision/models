@@ -10,8 +10,9 @@ from models.base import *
 def main():
     #url = "https://iptv-org.github.io/iptv/countries/ad.m3u8"
     #url = "https://s6.hopslan.com/orf11/tracks-v1a1/mono.m3u8"
-    url=  "https://s6.hopslan.com/orf11/tracks-v1a1/mono.m3u8"
-    models: list[CVModel] = [ObjectDetectionVideo(stream_url=url, width=1024, height=576)]
+    #url=  "https://s6.hopslan.com/orf11/tracks-v1a1/mono.m3u8"
+    url= "https://192.168.113.232:8081"
+    models: list[CVModel] = [ObjectDetectionVideo(stream_url=url, width=640, height=480)]
     models[0].run()
     
 
