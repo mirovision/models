@@ -4,7 +4,7 @@ import numpy
 import sys
 from time import sleep
 
-VIDEO_URL = "https://s6.hopslan.com/orf11/tracks-v1a1/mono.m3u8"
+VIDEO_URL = "https://ztnr.rtve.es/ztnr/1688877.m3u8"
 
 cv2.namedWindow("VLC COPY")
 
@@ -18,11 +18,11 @@ pipe = sp.Popen([ "ffmpeg", "-i", VIDEO_URL,
 
 while True:
     #bytes = sys.stdin.read()
-    raw_image = pipe.stdout.read(1024*576*3) # read 432*240*3 bytes (= 1 frame)
-    image =  numpy.fromstring(raw_image, dtype='uint8').reshape((576,1024,3))
+    raw_image = pipe.stdout.read(1280*726*3) # read 432*240*3 bytes (= 1 frame)
+    image =  numpy.fromstring(raw_image, dtype='uint8').reshape((726,1280,3))
     cv2.imshow("VLC COPY",image)
-    sleep(1)
-    pipe.stdout.flush()
-    if cv2.waitKey(5) == 27:
-        break
+    #sleep(1)
+    #pipe.stdout.flush()
+    #if cv2.waitKey(5) == 27:
+         #  break
 cv2.destroyAllWindows()
