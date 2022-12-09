@@ -43,6 +43,7 @@ class ObjectDetectionVideo(CVModel):
         import io
         import numpy
         #self.__image = Image.open(io.BytesIO(frame))
+        self.__numpy_image = None
         self.__numpy_image = numpy.fromstring(frame, dtype='uint8').reshape((self.__dimensions["height"],self.__dimensions["width"],3))
         self.__image = Image.fromarray(numpy.fromstring(frame, dtype='uint8').reshape((self.__dimensions["height"],self.__dimensions["width"],3)))
         self.__inputs = self.__feature_extractor(images=self.__image, return_tensors="pt")
@@ -78,10 +79,11 @@ class ObjectDetectionVideo(CVModel):
             if output["confidence"] > 0.6:
                 #img_draw.rectangle(((output["box"][0], output["box"][1]),(output["box"][2], output["box"][3])), outline='Red')
                 cv2.rectangle(self.__numpy_image, (output["box"][0], output["box"][1]), (output["box"][2], output["box"][3]), (0, 255, 0), 2)
-                cv2.putText(self.__numpy_image, output["item"], (output["box"][0],output["box"][1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-        blank_image = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
-        #cv2.imshow("CV VIZ", blank_image)
+                text = output["item"] + ": " + str(output["confidence"])
+                cv2.putText(self.__numpy_image, text, (output["box"][0],output["box"][1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        self.parsed_outputs = []
         cv2.imshow("CV VIZ",self.__numpy_image)
+        
 
     def run(self):
         import cv2
