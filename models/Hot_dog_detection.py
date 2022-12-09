@@ -27,4 +27,4 @@ class HotDog(CVModel):
         edit_img.text((position[0], position[1]),  self.hot_dog, font=font, fill=(255,255,255))
         image.save("edited_foto.jpg")
        # to see the result you need to save it as this example
-        #image.save("edited_butifarra.jpg")s
+        #image.save("edited_butifarra.jpg")

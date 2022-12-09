@@ -1,4 +1,8 @@
 transformers
-Pillow
 torch
-requests
+Pillow
+timm
+opencv-python
+# sudo apt install ffmpeg
+numpy
+ffmpeg-python
