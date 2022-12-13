@@ -6,3 +6,10 @@ opencv-python
 # sudo apt install ffmpeg
 numpy
 ffmpeg-python
+matplotlib
+vext
+vext.gi
+uvicorn
+fastapi
+python-multipart
+rawkit

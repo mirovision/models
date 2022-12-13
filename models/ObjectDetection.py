@@ -17,7 +17,8 @@ class ObjectDetection(CVModel):
         self.__image = None
         self.__inputs = None
         self.__outputs = None
-    
+        self.__results = None
+        self.__result_image = None
         from transformers import DetrFeatureExtractor, DetrForObjectDetection
         self.__feature_extractor = DetrFeatureExtractor.from_pretrained("facebook/detr-resnet-50")
         self.__model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50")
@@ -25,30 +26,54 @@ class ObjectDetection(CVModel):
     
     def __parse_input(self, image):
         from PIL import Image
+        import numpy as np
         self.__image = Image.open(image)
+        self.__result_image = np.array(self.__image)
         self.__inputs = self.__feature_extractor(images=self.__image, return_tensors="pt")
     
     def __get_output(self):
         self.__outputs = self.__model(**self.__inputs)
     
     def input(self, image):
+        from io import BytesIO
         super().input(image=None)
-        self.__parse_input(image=image)
+        self.__parse_input(image=BytesIO(image))
         self.__get_output()
         
         return True
-    
-    def output(self):
-        super().output()
-        import torch
-        target_sizes = torch.tensor([self.__image.size[::-1]])
-        results = self.__feature_extractor.post_process_object_detection(self.__outputs, target_sizes=target_sizes)[0]
-        for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
+
+    def __draw_output(self):
+        import cv2
+        from PIL import Image
+        import numpy as np
+        from matplotlib import cm
+        for score, label, box in zip(self.__results["scores"], self.__results["labels"], self.__results["boxes"]):
             box = [round(i, 2) for i in box.tolist()]
             # let's only keep detections with score > 0.9
-            if score > 0.9:
+            if score > 0.5:
                 print(
                     f"Detected {self.__model.config.id2label[label.item()]} with confidence "
                     f"{round(score.item(), 3)} at location {box}"
                 )
-        return True
+                #self.parsed_outputs.append({"box": [int(box[0]), int(box[1]), int(box[2]), int(box[3])], "item": self.__model.config.id2label[label.item()], "confidence": round(score.item(), 3)})
+                cv2.rectangle(self.__result_image, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), (0, 255, 0), 2)
+                text = self.__model.config.id2label[label.item()] + ": " + str(round(score.item(), 3))
+                cv2.putText(self.__result_image, text, (int(box[0]+5),int(box[1]+13)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        
+        result  = self.__result_image
+        return result
+        #return Image.fromarray(self.__result_image * 255)
+        #return self.__result_image
+
+    
+    def output(self):
+        super().output()
+        import torch
+        import cv2
+        target_sizes = torch.tensor([self.__image.size[::-1]])
+        self.__results = self.__feature_extractor.post_process_object_detection(self.__outputs, target_sizes=target_sizes)[0]
+        # image = self.__draw_output()
+        # image.save("sample.jpg")
+        result = self.__draw_output()
+        #success, encoded_image = cv2.imencode('.jpg', result)
+        return result
