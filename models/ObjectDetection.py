@@ -43,7 +43,6 @@ class ObjectDetection(CVModel):
         return True
 
     def __draw_output(self):
-        self.__result_image
         import cv2
         from PIL import Image
         import numpy as np
@@ -61,9 +60,10 @@ class ObjectDetection(CVModel):
                 text = self.__model.config.id2label[label.item()] + ": " + str(round(score.item(), 3))
                 cv2.putText(self.__result_image, text, (int(box[0]+5),int(box[1]+13)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         
-        #result  = self.__result_image * 255
-        #return Image.fromarray(self.__result_image)
-        return self.__result_image
+        result  = self.__result_image
+        return result
+        #return Image.fromarray(self.__result_image * 255)
+        #return self.__result_image
 
     
     def output(self):
@@ -75,5 +75,5 @@ class ObjectDetection(CVModel):
         # image = self.__draw_output()
         # image.save("sample.jpg")
         result = self.__draw_output()
-        success, encoded_image = cv2.imencode('.jpg', result)
+        #success, encoded_image = cv2.imencode('.jpg', result)
         return result

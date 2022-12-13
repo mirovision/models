@@ -12,3 +12,4 @@ vext.gi
 uvicorn
 fastapi
 python-multipart
+rawkit
