@@ -38,7 +38,9 @@ class ObjectDetection(CVModel):
         self.__outputs = self.__model(**self.__inputs)
         target_sizes = torch.tensor([self.__image.size[::-1]])
         self.__results = self.__feature_extractor.post_process_object_detection(self.__outputs, target_sizes=target_sizes)[0]
+    
     def draw(self, image):
+        self.__result_image = np.array(self.__image)
         for score, label, box in zip(self.__results["scores"], self.__results["labels"], self.__results["boxes"]):
             box = [round(i, 2) for i in box.tolist()]
             # let's only keep detections with score > 0.
