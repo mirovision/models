@@ -9,10 +9,10 @@ class CVModel:
     
     def __init__(self):
         # here will go all the imports and initialization directives
-        return
+        print("Initializing")
     def input(self, image):
         # this will be the call to generate
-        return
+        print ("Processing Input")
     def output(self):
         # this will be the call to return the output of the model
-        return
+        print ("Output")
