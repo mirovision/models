@@ -3,6 +3,7 @@ import numpy as np
 import io
 import time
 from models.Hot_dog_detection import HotDog
+from models.ObjectDetection import ObjectDetection
 from PIL import Image
 from flask import Flask, render_template, Response
 import cv2
@@ -53,6 +54,7 @@ class Stream():
 def webpage_output():
     models = []
     models.append(HotDog())
+    models.append(ObjectDetection())
     st = Stream("https://s6.hopslan.com/orf11/tracks-v1a1/mono.m3u8")
     return Response(st.output(models), mimetype='multipart/x-mixed-replace; boundary=frame')
 
