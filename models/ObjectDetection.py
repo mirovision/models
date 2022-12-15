@@ -45,7 +45,7 @@ class ObjectDetection(CVModel):
             box = [round(i, 2) for i in box.tolist()]
             # let's only keep detections with score > 0.
             # 9
-            if score > 0.5:
+            if score > 0.9:
                 #self.parsed_outputs.append({"box": [int(box[0]), int(box[1]), int(box[2]), int(box[3])], "item": self.__model.config.id2label[label.item()], "confidence": round(score.item(), 3)})
                 cv2.rectangle(self.__result_image, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), (0, 255, 0), 2)
                 text = self.__model.config.id2label[label.item()] + ": " + str(round(score.item(), 3))

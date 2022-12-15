@@ -1,25 +1,25 @@
-from models.Hot_dog_detection import HotDog
-from models.ObjectDetection import ObjectDetection
-from src.stream import Stream
-from PIL import Image
-from src.try_out import Try_out
-import io
+from src.models.dict_models import dict_models
+from src.path.stream import Stream
+from src.path.try_out import Try_out
 from flask import Flask, send_file, Response, request
 
 
 app = Flask(__name__)
 
 
+def choosing_models_by_parameters(parameters):
+    models  = []
 
-
-
-
+    for param in parameters:
+        try :
+            models.append(dict_models[param]())
+        except:
+            print("invalid model name")        
+    return models
 
 @app.route('/try_out', methods = ['GET', 'POST'])
 def try_out_output():
-    models = []
-    models.append(HotDog())
-    models.append(ObjectDetection())
+    models = choosing_models_by_parameters(request.args)
     image = False
     if request.method == 'POST':
         image = request.files['image']
@@ -28,11 +28,10 @@ def try_out_output():
     
     return send_file('src/images/404.jpg', mimetype='image/gif')
 
-@app.route('/')
+
+@app.route('/', methods=['GET'])
 def webpage_output():
-    models = []
-    models.append(HotDog())
-    models.append(ObjectDetection())
+    models = choosing_models_by_parameters(request.args)
     st = Stream("https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8")
     return Response(st.output(models), mimetype='multipart/x-mixed-replace; boundary=frame')
 
