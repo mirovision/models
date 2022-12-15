@@ -13,7 +13,7 @@ class Stream():
            "-vcodec", "rawvideo", "-"],
            stdin = sp.PIPE, stdout = sp.PIPE)
 
-    def input(self,widht=1024, height=576):
+    def __take_raw_frame(self,widht=1024, height=576):
         raw_image = self.pipe_input.stdout.read(widht*height*3)
         image =  np.fromstring(raw_image, dtype='uint8')
         image = image.reshape(height,widht,3)
@@ -25,13 +25,17 @@ class Stream():
             model.calculate(image)      
         for model in models:
             image = model.draw(image)
-        img_byte = io.BytesIO()
-        image.save(img_byte, format = 'PNG')
-        return img_byte.getvalue()
+        return image
 
+    def __transform_image_into_byte(self, frame):
+        img_byte = io.BytesIO()
+        frame.save(img_byte, format = 'PNG')
+        return img_byte.getvalue()
+    
     def output(self, models):
         while True:
-            input = self.input()
-            image = self.__process_image(input, models)
+            raw_frame = self.__take_raw_frame()
+            frame = self.__process_image(raw_frame, models)
+            image_byte = self.__transform_image_into_byte(frame)
             yield((b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n'))
+                    b'Content-Type: image/jpeg\r\n\r\n' + image_byte + b'\r\n'))

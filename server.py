@@ -17,19 +17,23 @@ app = Flask(__name__)
 
 @app.route('/try_out', methods = ['GET', 'POST'])
 def try_out_output():
-    try_out = Try_out()
+    models = []
+    models.append(HotDog())
+    models.append(ObjectDetection())
     image = False
     if request.method == 'POST':
         image = request.files['image']
-        return send_file(try_out.output(image), mimetype='image/jpeg')
-    return send_file('local_test/ciervo.jpg', mimetype='image/gif')
+        try_out = Try_out(image)
+        return send_file(try_out.output(models), mimetype='image/jpeg')
+    
+    return send_file('src/images/404.jpg', mimetype='image/gif')
 
 @app.route('/')
 def webpage_output():
     models = []
     models.append(HotDog())
     models.append(ObjectDetection())
-    st = Stream("https://s6.hopslan.com/orf11/tracks-v1a1/mono.m3u8")
+    st = Stream("https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8")
     return Response(st.output(models), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
