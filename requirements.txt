@@ -7,8 +7,8 @@ opencv-python
 numpy
 ffmpeg-python
 matplotlib
-vext
-vext.gi
+#vext
+#vext.gi
 uvicorn
 fastapi
 python-multipart
