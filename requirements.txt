@@ -7,9 +7,13 @@ opencv-python
 numpy
 ffmpeg-python
 matplotlib
+keras
+tensorflow
 #vext
 #vext.gi
 uvicorn
 fastapi
 python-multipart
 rawkit
+multipart-reader
+aiohttp
