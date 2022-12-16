@@ -13,3 +13,5 @@ uvicorn
 fastapi
 python-multipart
 rawkit
+multipart-reader
+aiohttp
