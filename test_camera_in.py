@@ -1,28 +1,31 @@
-import requests
-import socket
-import http
-import urllib3
+
 import io
 from multipart_reader import MultipartReader
 import aiohttp
 import asyncio
-import binascii
+from PIL import Image
+from keras.preprocessing import image
 
-# https://github.com/python-pillow/Pillow/issues/4097
+
 counter = 0
 async def function():
-    async with aiohttp.request(url="http://f067-194-30-110-85.ngrok.io", method="GET") as resp:
+    async with aiohttp.request(url="http://9c4e-163-5-23-104.ngrok.io", method="GET") as resp:
         reader = aiohttp.MultipartReader.from_response(resp)
         while True:
             part = await reader.next()
             content = await part.read()
+            
+            print("==========")
             print (part.headers[aiohttp.hdrs.CONTENT_TYPE])
-            print (content)
+            print("==========")
+            print (type(content))
+            print("==========")
+
             
             #r_data = "".join(chr(int(content[i:i+2],16)) for i in range(0, len(content),2))
             # b_data = binascii.unhexlify(content.strip().decode("utf-8"))
             # stream = io.StringIO(b_data)
-            img = Image.open(io.BytesIO(content.encode())).convert("RGBA")
+            img = Image.open(io.BytesIO(content))#.convert("RGBA")
             img = img.save("ARENTWASUP" + str(counter) + ".jpg")
             if part is None:
                 break
