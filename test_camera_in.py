@@ -1,36 +1,33 @@
 
 import io
-from multipart_reader import MultipartReader
 import aiohttp
 import asyncio
 from PIL import Image
 from keras.preprocessing import image
+from multipart_reader import MultipartReader
 
 
 counter = 0
+server_url = "http://9c4e-163-5-23-104.ngrok.io"
+
 async def function():
-    async with aiohttp.request(url="http://9c4e-163-5-23-104.ngrok.io", method="GET") as resp:
+    async with aiohttp.request(url=server_url, method="GET") as resp:
         reader = aiohttp.MultipartReader.from_response(resp)
         while True:
             part = await reader.next()
             content = await part.read()
-            
+
             print("==========")
             print (part.headers[aiohttp.hdrs.CONTENT_TYPE])
             print("==========")
             print (type(content))
             print("==========")
 
-            
-            #r_data = "".join(chr(int(content[i:i+2],16)) for i in range(0, len(content),2))
-            # b_data = binascii.unhexlify(content.strip().decode("utf-8"))
-            # stream = io.StringIO(b_data)
             img = Image.open(io.BytesIO(content))#.convert("RGBA")
             img = img.save("ARENTWASUP" + str(counter) + ".jpg")
             if part is None:
                 break
             
-        pass
     
 
 asyncio.run(function())
