@@ -8,7 +8,7 @@ from multipart_reader import MultipartReader
 
 
 counter = 0
-server_url = "http://9c4e-163-5-23-104.ngrok.io"
+server_url = "http://a412-163-5-23-104.ngrok.io/"
 
 async def function():
     async with aiohttp.request(url=server_url, method="GET") as resp:
