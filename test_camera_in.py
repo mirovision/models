@@ -8,18 +8,22 @@ import aiohttp
 import asyncio
 import binascii
 
+# https://github.com/python-pillow/Pillow/issues/4097
+counter = 0
 async def function():
-    async with aiohttp.request(url="http://fcbc-163-5-23-104.ngrok.io/", method="GET") as resp:
+    async with aiohttp.request(url="http://f067-194-30-110-85.ngrok.io", method="GET") as resp:
         reader = aiohttp.MultipartReader.from_response(resp)
         while True:
             part = await reader.next()
             content = await part.read()
             print (part.headers[aiohttp.hdrs.CONTENT_TYPE])
             print (content)
+            
             #r_data = "".join(chr(int(content[i:i+2],16)) for i in range(0, len(content),2))
             # b_data = binascii.unhexlify(content.strip().decode("utf-8"))
             # stream = io.StringIO(b_data)
-            # img = Image.open(stream)
+            img = Image.open(io.BytesIO(content.encode())).convert("RGBA")
+            img = img.save("ARENTWASUP" + str(counter) + ".jpg")
             if part is None:
                 break
             
