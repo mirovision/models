@@ -3,6 +3,5 @@ version: "3.0"
 services:
   ai:
     build: .
-    container_name: models
-    working_dir: /
-    image: models:1.0
+    ports:
+      - "8096:8096"

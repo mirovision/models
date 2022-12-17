@@ -1,9 +1,21 @@
-FROM python:3.8.10
+FROM python:3.8
 
-WORKDIR .
+COPY ./freeze.txt app/freeze.txt
 
-ADD . .
+WORKDIR /app
 
 RUN pip install -r freeze.txt
 
-CMD ["./server.py"]
+RUN apt-get update
+
+RUN apt-get install ffmpeg libsm6 libxext6  -y
+
+EXPOSE 8096
+
+COPY . /app
+
+#ENTRYPOINT [ "python3" ]
+
+CMD ["python3", "server.py"]
+
+
