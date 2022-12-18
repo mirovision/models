@@ -1,7 +1,8 @@
 from src.models.dict_models import dict_models
 from src.path.stream import Stream
+import asyncio
 from src.path.try_out import Try_out
-from flask import Flask, send_file, Response, request, render_template, abort
+from aioflask import Flask, send_file, Response, request, render_template, abort
 
 
 app = Flask(__name__)
@@ -29,8 +30,12 @@ def try_out_output(models):
         return send_file(try_out.output(models), mimetype='image/jpeg')   
     return abort(404)
 
+
+
+
 @app.route('/webcam/<models>/', methods = ['GET', 'POST'])
-def webcam(models): 
+async def webcam(models): 
+    print("hola")
     models = choosing_models_by_parameters(models)
     url = request.args.get('url')
     if url == None:
@@ -39,8 +44,11 @@ def webcam(models):
         st = Stream(url=url)
     except:
         return abort(404)
-    return Response(st.output(models), mimetype='multipart/x-mixed-replace; boundary=frame')
+    async for image in st.output(models):
+        return Response(image, mimetype='image/jpeg')
+
+
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8069)
+    app.run(host="0.0.0.0", port=8080)
