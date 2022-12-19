@@ -25,17 +25,17 @@ class Stream():
         image_io.seek(0)
         return image_io
     
-    async def output(self, models):
-        async with aiohttp.request(url=self.url, method="GET") as resp:
-            reader = aiohttp.MultipartReader.from_response(resp)
-            while True:
-                part = await reader.next()
-                content = await part.read()
-                print (part.headers[aiohttp.hdrs.CONTENT_TYPE])
-                print (type(content))
-                self.image = Image.open(io.BytesIO(content))
-                self.__process_image(models)
-                self.image_io = self.__transform_image_into_byte(self.image)
-                yield((self.image_io))
-                if part is None:
-                    break
+    async def output(self, models): 
+            async with aiohttp.request(url=self.url, method="GET") as resp:
+                while True:
+                    reader = aiohttp.MultipartReader.from_response(resp)
+                    part = await reader.next()
+                    content = await part.read()
+                    print (part.headers[aiohttp.hdrs.CONTENT_TYPE])
+                    print (type(content))
+                    self.image = Image.open(io.BytesIO(content))
+                    self.__process_image(models)
+                    self.image_io = self.__transform_image_into_byte(self.image)
+                    yield((self.image_io))
+                    if part is None:
+                        break
