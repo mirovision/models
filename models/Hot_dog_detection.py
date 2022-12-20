@@ -20,7 +20,7 @@ class HotDog(CVModel):
 
     def draw(self, image):
         edit_img = ImageDraw.Draw(image)
-        font = ImageFont.truetype('local_test/hot_dog_font.ttf' , 20)
+        font = ImageFont.truetype('src/fonts/hot_dog_font.ttf' , 20)
         edit_img.text((400,400), text=self.hot_dog ,font=font, fill=(255,255,255))
         return image
 
