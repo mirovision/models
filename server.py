@@ -25,7 +25,7 @@ def choosing_models_by_parameters(parameters):
 def try_out_output(models):
     models = choosing_models_by_parameters(models)
     image = False
-    if request.method == 'POST':
+    if request.method == 'GET':
         image = request.files['image']
         try_out = Try_out(image)
         return send_file(try_out.output(models), mimetype='image/jpeg')   
@@ -45,4 +45,4 @@ async def webcam(models):
         return Response(image, mimetype='image/jpeg')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8079)
