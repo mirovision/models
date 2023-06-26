@@ -1,0 +1,29 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t my-docker-image model_launcher/.
+
+      - name: Check if Docker build was successful
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Docker build successful."
+          else
+            echo "Docker build failed."
+            exit 1
+          fi
